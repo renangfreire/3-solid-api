@@ -1,16 +1,20 @@
-import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import { UserAlreadyExists } from "@/services/errors/UserAlreadyExists";
+import { makeRegisterService } from "@/main/factories/makeRegisterService";
 import { RegisterUserService } from "@/services/registerUser";
 import { compare } from "bcryptjs";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
+let sut: RegisterUserService;
 
 describe("RegisterUser Service", () => {
-    it("Should be able to register", async () => {
-        const inMemoryUserRepository = new InMemoryUserRepository();
-        const registerService = new RegisterUserService(inMemoryUserRepository);
 
-        const { user } = await registerService.handle({
+    beforeEach(() => {
+        sut = makeRegisterService()
+    })
+
+
+    it("Should be able to register", async () => {
+        const { user } = await sut.handle({
             name: "John Doe",
             email: "Johndoe@example.com",
             password: "123456"
@@ -20,10 +24,7 @@ describe("RegisterUser Service", () => {
     })
 
     it("Should hash user password upon registration", async () => {
-        const inMemoryUserRepository = new InMemoryUserRepository();
-        const registerService = new RegisterUserService(inMemoryUserRepository);
-
-        const { user } = await registerService.handle({
+        const { user } = await sut.handle({
             name: "John Doe",
             email: "Johndoe@example.com",
             password: "123456"
@@ -35,17 +36,14 @@ describe("RegisterUser Service", () => {
     })
 
     it("Should not be able to register with the same email twice", async () => {
-        const inMemoryUserRepository = new InMemoryUserRepository();
-        const registerService = new RegisterUserService(inMemoryUserRepository);
-
-        await registerService.handle({
+        await sut.handle({
             name: "John Doe",
             email: "Johndoe@example.com",
             password: "123456"
         })
 
         await expect(() => 
-            registerService.handle({
+            sut.handle({
                 name: "John Doe",
                 email: "Johndoe@example.com",
                 password: "123456"

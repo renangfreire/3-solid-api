@@ -1,5 +1,5 @@
-import { app } from './app';
-import { env } from './main/env';
+import { app } from './main/config/app';
+import { env } from './main/config';
 
 app.listen({
     port: env.PORT,
