@@ -24,6 +24,10 @@ export class RegisterUserService{
             throw conflict(new UserAlreadyExists())
         }
     
-        await this.userRepository.create({name, email, password_hash});
+        const user = await this.userRepository.create({name, email, password_hash});
+
+        return { 
+            user
+        }
     }
 }
