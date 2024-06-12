@@ -5,5 +5,6 @@ import { Prisma, User } from "@prisma/client";
 // fazendo assim com que o services não precise ser atrelado ao PRISMA REPOSITORY.
 export interface UsersRepository{
     create(data: Prisma.UserCreateInput): Promise<User>
-    findByEmail(email: string): Promise<User | null>
+    findByEmail(email: string): Promise<User | null>,
+    findById(id: string): Promise<User | null>
 }
