@@ -1,9 +1,9 @@
 import { InMemoryCheckInRepository } from "@/repositories/in-memory/in-memory-check-in-repository";
-import { FetchMemberCheckInsHistoryService } from "@/services/fetchUserCheckinsHistory";
+import { FetchUserCheckInsHistoryService } from "@/services/fetchUserCheckinsHistory";
 import {beforeEach, describe, expect, it } from "vitest";
 
 let checkInRepository: InMemoryCheckInRepository
-let sut: FetchMemberCheckInsHistoryService
+let sut: FetchUserCheckInsHistoryService
 
 async function defaultCreate(){
     const checkIn = await checkInRepository.create({
@@ -19,7 +19,7 @@ async function defaultCreate(){
 describe("Fetch CheckIn history Service", () => {
     beforeEach(async () => {
         checkInRepository = new InMemoryCheckInRepository();
-        sut = new FetchMemberCheckInsHistoryService(checkInRepository);
+        sut = new FetchUserCheckInsHistoryService(checkInRepository);
         })  
         
     it("Should be able to user fetch all check ins", async () => {

@@ -1,15 +1,15 @@
 import { CheckInRepository } from "@/repositories/@types/check-in-repository";
 
 
-interface FetchMemberCheckInsHistoryRequest{
+interface FetchUserCheckInsHistoryRequest{
     userId: string;
     page?: number;
 }
 
-export class FetchMemberCheckInsHistoryService{
+export class FetchUserCheckInsHistoryService{
     constructor(private checkInRepository: CheckInRepository){}
 
-    async handle({userId, page}: FetchMemberCheckInsHistoryRequest){
+    async handle({userId, page}: FetchUserCheckInsHistoryRequest){
 
         const checkIns = await this.checkInRepository.findManyCheckInsByUserId(userId, page || 1)
         
