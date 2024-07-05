@@ -15,7 +15,38 @@ export async function authenticateUserController(req: FastifyRequest, reply: Fas
     const userRepository = new PrismaUserRepository();
     const authenticateUserService = new AuthenticateUserService(userRepository);
 
-    await authenticateUserService.handle(data);
+    const { user } = await authenticateUserService.handle(data);
 
-    return reply.status(200).send();
+    const token = await reply.jwtSign(
+        {
+            role: user.role
+        }, 
+        {
+            sign: {
+                sub: user.id,
+        }
+    })
+
+    const refreshToken = await reply.jwtSign(
+        {
+            role: user.role
+        }, 
+        {
+            sign: {
+                sub: user.id,
+                expiresIn: "7d"
+        }
+    })
+
+    return reply
+    .status(200)
+    .setCookie("refreshToken", refreshToken, {
+        path: "/",
+        secure: true,
+        sameSite: true,
+        httpOnly: true
+    })
+    .send({
+        token
+    });
 }

@@ -1,15 +1,18 @@
 import { UserAlreadyExists } from "@/services/errors/UserAlreadyExists";
-import { makeRegisterService } from "@/main/factories/makeRegisterService";
 import { RegisterUserService } from "@/services/registerUser";
 import { compare } from "bcryptjs";
 import { beforeEach, describe, expect, it } from "vitest";
+import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
+import { GetUserProfileService } from "@/services/getUserProfile";
 
+let inMemoryUserRepository: InMemoryUserRepository
 let sut: RegisterUserService;
 
 describe("RegisterUser Service", () => {
 
     beforeEach(() => {
-        sut = makeRegisterService()
+        inMemoryUserRepository = new InMemoryUserRepository();
+        sut = new RegisterUserService(inMemoryUserRepository);
     })
 
 

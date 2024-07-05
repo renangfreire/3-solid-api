@@ -5,10 +5,14 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
     plugins: [tsconfigPaths()],
     test: {
+        environmentMatchGlobs: [
+            ["test/controllers/**", "prisma"]
+        ],
         coverage: {
-            exclude: [
+            exclude: [ 
                 ...coverageConfigDefaults.exclude,
                 "**/src/main/**",
+                "**/src/server.ts",
             ]
         }
     }
